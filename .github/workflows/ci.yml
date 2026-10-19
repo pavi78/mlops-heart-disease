@@ -34,7 +34,7 @@ jobs:
       - name: Run API tests
         env:
           DOCKER_MODE: "true"
-        run: python -m pytest tests/test_api.py -v
+        run: python -m pytest tests/ -v
 
   docker-build:
     runs-on: ubuntu-latest
