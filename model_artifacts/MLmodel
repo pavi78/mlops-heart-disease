@@ -1,0 +1,24 @@
+artifact_path: file:///C:/Users/Pavithra/mlops-heart-disease/mlruns/1/models/m-e7c5a29accdd4fc6b449d0b52bc21c21/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.11.9
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.1
+    skops_trusted_types:
+    - numpy.dtype
+mlflow_version: 3.17.1
+model_id: m-e7c5a29accdd4fc6b449d0b52bc21c21
+model_size_bytes: 198449
+model_uuid: m-e7c5a29accdd4fc6b449d0b52bc21c21
+prompts: null
+run_id: 9a32e6b14a524e4a9b5ffd1f99dae1bc
+utc_time_created: '2026-10-18 13:30:56.875180'

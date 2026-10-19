@@ -1,0 +1,20 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local data
+data/
+
+# MLflow local tracking database and runs
+mlflow.db
+mlruns/
+
+# Keep the model artifacts needed for Docker deployment
+artifacts/
+
+# Editors and operating system
+.vscode/
+.DS_Store
+Thumbs.db
