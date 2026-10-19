@@ -13,26 +13,25 @@ This script:
 9. Saves the final model and training artifacts
 """
 
-from pathlib import Path
 import json
+from pathlib import Path
 
 import joblib
+import matplotlib.pyplot as plt
 import mlflow
 import mlflow.sklearn
 import pandas as pd
-import matplotlib.pyplot as plt
-
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    RocCurveDisplay,
     accuracy_score,
     precision_score,
     recall_score,
     roc_auc_score,
-    ConfusionMatrixDisplay,
-    RocCurveDisplay,
 )
 from sklearn.model_selection import (
     GridSearchCV,
@@ -41,7 +40,6 @@ from sklearn.model_selection import (
 )
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-
 
 # ===================================================================
 # PROJECT PATHS
@@ -792,8 +790,8 @@ with mlflow.start_run(
     print("=" * 70)
 
     print(
-        f"Experiment: "
-        f"Heart Disease Classification"
+        "Experiment: "
+        "Heart Disease Classification"
     )
 
     print(

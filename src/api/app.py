@@ -1,13 +1,11 @@
+import os
 from pathlib import Path
-from typing import Optional
 
 import mlflow
 import pandas as pd
-import os
 from fastapi import FastAPI
-from pydantic import BaseModel
 from prometheus_fastapi_instrumentator import Instrumentator
-
+from pydantic import BaseModel
 
 # ---------------------------------------------------------
 # Project paths
@@ -56,8 +54,8 @@ class HeartDiseaseInput(BaseModel):
     exang: int
     oldpeak: float
     slope: int
-    ca: Optional[float] = None
-    thal: Optional[float] = None
+    ca: float | None = None
+    thal: float | None = None
 
 
 # ---------------------------------------------------------
