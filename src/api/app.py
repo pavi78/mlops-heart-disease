@@ -6,6 +6,7 @@ import pandas as pd
 import os
 from fastapi import FastAPI
 from pydantic import BaseModel
+from prometheus_fastapi_instrumentator import Instrumentator
 
 
 # ---------------------------------------------------------
@@ -38,7 +39,7 @@ app = FastAPI(
     description="MLOps inference API using FastAPI and MLflow Model Registry",
     version="1.0.0",
 )
-
+Instrumentator().instrument(app).expose(app)
 
 # ---------------------------------------------------------
 # Input schema
