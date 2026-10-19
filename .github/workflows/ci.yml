@@ -30,7 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest httpx
-      
+
       - name: Run Ruff linting
         run: python -m ruff check src tests
 
@@ -38,6 +38,21 @@ jobs:
         env:
           DOCKER_MODE: "true"
         run: python -m pytest tests/ -v
+
+      - name: Download heart disease dataset
+        run: python scripts/download_data.py
+
+      - name: Train and evaluate models
+        run: python src/models/train.py
+
+      - name: Upload training artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: heart-disease-training-artifacts
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 14
 
   docker-build:
     runs-on: ubuntu-latest

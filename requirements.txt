@@ -8,3 +8,5 @@ skops
 prometheus-fastapi-instrumentator
 
 ruff
+
+requests
