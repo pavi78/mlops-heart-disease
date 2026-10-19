@@ -108,7 +108,7 @@ The application is deployed to a local Kubernetes cluster managed by Docker Desk
 The Kubernetes configuration files are located in the `k8s/` directory:
 
 - `deployment.yaml`: Defines the application Deployment and container configuration.
-- `service.yaml`: Exposes the application internally through a Kubernetes Service.
+- `service.yaml`: Exposes the application through a Kubernetes NodePort Service.
 
 ### Apply the Kubernetes Configuration
 
@@ -131,25 +131,29 @@ Check the running pods:
 kubectl get pods
 ```
 
-Check the Service:
+Check the Service configuration:
 
 ```powershell
-kubectl get services
+kubectl get service heart-disease-api
 ```
+
+The Service is configured as a NodePort Service using container port `8000` and NodePort `30080`. Direct access through `localhost:30080` was unsuccessful in the local Docker Desktop environment, so port forwarding is used for reliable local access.
 
 ### Access the API Using Port Forwarding
 
-The Kubernetes Service exposes the API on port `8000` inside the cluster. Forward it to local port `8001`:
+Forward local port `8002` to port `8000` on the Kubernetes Service:
 
 ```powershell
-kubectl port-forward service/heart-disease-api 8001:8000
+kubectl port-forward service/heart-disease-api 8002:8000
 ```
 
 Keep the terminal running while accessing the service.
 
-- API documentation: `http://127.0.0.1:8001/docs`
-- Health check: `http://127.0.0.1:8001/health`
-- Prometheus metrics: `http://127.0.0.1:8001/metrics`
+- API documentation: [http://127.0.0.1:8002/docs](http://127.0.0.1:8002/docs)
+- Health check: [http://127.0.0.1:8002/health](http://127.0.0.1:8002/health)
+- Prometheus metrics: [http://127.0.0.1:8002/metrics](http://127.0.0.1:8002/metrics)
+
+The health endpoint and prediction endpoint were successfully tested through Kubernetes port forwarding.
 
 ## 8. CI/CD Pipeline
 
@@ -159,7 +163,7 @@ The workflow is defined in `.github/workflows/ci.yml`.
 
 ### Pipeline Jobs
 
-1. **Test:** Installs dependencies and runs the API test suite.
+1. **Test:** Installs dependencies, runs Ruff linting, and executes the automated test suite.
 2. **Docker Build:** Builds the application image after the tests succeed.
 3. **Publish:** Builds and publishes the container image to GHCR when changes are pushed to the `main` branch and the required jobs succeed.
 
@@ -179,7 +183,7 @@ If the package is private, authenticate to GHCR before pulling the image.
 
 ### CI/CD Verification
 
-The GitHub Actions workflow completed successfully for the Prometheus instrumentation changes, with all three jobs—test, Docker build, and publish—passing.
+GitHub Actions completed successfully for the Ruff linting and model-pipeline testing changes. All three jobs—test, Docker build, and publish—passed.
 
 ## 9. Monitoring and Logging
 
@@ -216,7 +220,7 @@ The metrics include:
 
 With Kubernetes port forwarding active, open:
 
-`http://127.0.0.1:8001/metrics`
+[http://127.0.0.1:8002/metrics](http://127.0.0.1:8002/metrics)
 
 The endpoint was verified against the running Kubernetes deployment. The observed metrics included successful health-check and prediction requests, along with request-duration measurements.
 
@@ -226,11 +230,13 @@ The endpoint was verified against the running Kubernetes deployment. The observe
 
 The following project components have been verified:
 
-- Four API tests passed using Pytest.
+- Eight automated tests passed using Pytest, covering API endpoints and model-pipeline behavior.
+- Ruff linting completed successfully with no remaining issues.
 - The Docker image built successfully.
 - The API health endpoint returned a healthy response.
-- The prediction endpoint returned HTTP `200 OK`.
+- The prediction endpoint returned HTTP `200 OK` with prediction, probability, and model information.
 - The Kubernetes Deployment rolled out successfully.
+- The Kubernetes Service was verified as a NodePort Service.
 - Kubernetes logs captured health-check and prediction requests.
 - The `/metrics` endpoint exposed Prometheus-compatible metrics.
 - GitHub Actions completed the test, Docker build, and publish jobs successfully.
